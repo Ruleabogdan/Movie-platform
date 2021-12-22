@@ -4,12 +4,12 @@ import com.streamingplatform.moviestreamingplatform.model.User;
 
 import java.util.List;
 
-public interface iUserService {
-    public void save(User theUser);
+public interface IUserService {
+    public User save(User theUser);
 
     public List<User> findAll();
 
-    public void deleteById(long userId);
+    public User deleteById(long userId);
 
     public User findById(long userId);
 }

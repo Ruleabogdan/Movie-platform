@@ -4,6 +4,6 @@ import com.streamingplatform.moviestreamingplatform.model.User;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface iUserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
 
 }
