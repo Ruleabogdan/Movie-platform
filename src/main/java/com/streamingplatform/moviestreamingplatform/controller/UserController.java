@@ -15,42 +15,34 @@ import org.springframework.web.bind.annotation.RestController;
 import java.sql.Date;
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+
 @RestController
-@RequestMapping("/")
+@AllArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
     private UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
-
-    @GetMapping("/users")
+    @GetMapping("/")
     public List<User> getUsers() {
         return userService.findAll();
     }
 
-    @PostMapping("/users")
+    @PostMapping("/")
     public User addUser(@RequestBody User theUser) {
-        // if they pass an id in JSON
-        theUser.setId(0);
-        // set the current date
-        theUser.setCreationDate(new Date(System.currentTimeMillis()));
-        userService.save(theUser);
-        return theUser;
+        return userService.save(theUser);
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}")
     public User getUserById(@PathVariable long userId) {
         User theUser = userService.findById(userId);
         return theUser;
     }
 
-    @DeleteMapping("/users/{userId}")
+    @DeleteMapping("/{userId}")
     public User deleteUser(@PathVariable long userId) {
-        User theUser = userService.findById(userId);
-        userService.deleteById(userId);
+        User theUser = userService.deleteById(userId);
         return theUser;
     }
 }

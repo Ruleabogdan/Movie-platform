@@ -1,28 +1,32 @@
 package com.streamingplatform.moviestreamingplatform.service;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.streamingplatform.moviestreamingplatform.model.User;
-import com.streamingplatform.moviestreamingplatform.repository.iUserRepository;
+import com.streamingplatform.moviestreamingplatform.repository.UserRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
+
 @Service
-public class UserService implements iUserService{
+@AllArgsConstructor
+public class UserService implements IUserService {
 
-    private iUserRepository userRepository;
-
-    @Autowired
-    public UserService(iUserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private UserRepository userRepository;
 
     @Override
-    public void save(User theUser) {
+    public User save(User theUser) {
+        theUser.setId(0);
+
+        theUser.setCreationDate(new Date(System.currentTimeMillis()));
+
         userRepository.save(theUser);
+
+        return userRepository.getById(theUser.getId());
     }
 
     @Override
@@ -31,8 +35,14 @@ public class UserService implements iUserService{
     }
 
     @Override
-    public void deleteById(long userId) {
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    public User deleteById(long userId)
+    {
+        User theUser = userRepository.findById(userId).get();
+
         userRepository.deleteById(userId);
+
+        return theUser;
     }
 
     @Override
