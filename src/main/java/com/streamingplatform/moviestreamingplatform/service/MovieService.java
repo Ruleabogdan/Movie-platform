@@ -16,14 +16,13 @@ import lombok.AllArgsConstructor;
 public class MovieService implements IMovieService {
 
     private MovieRepository movieRepository;
+    private UserService userService;
 
     @Override
-    public Movie save(Movie theMovie)
-    {
+    public Movie save(Movie theMovie) {
         theMovie.setId(0);
-
+        theMovie.setUser(userService.findById(1));
         movieRepository.save(theMovie);
-
         theMovie = movieRepository.getById(theMovie.getId());
         return theMovie;
     }
@@ -31,16 +30,12 @@ public class MovieService implements IMovieService {
     @Override
     public Movie getById(long theId) {
         Optional<Movie> result = movieRepository.findById(theId);
-
         Movie theMovie = null;
-
-        if(result.isPresent()){
+        if (result.isPresent()) {
             theMovie = result.get();
-        }
-        else {
+        } else {
             throw new RuntimeException("Did not find the movie with the id - " + theId);
         }
-
         return theMovie;
     }
 

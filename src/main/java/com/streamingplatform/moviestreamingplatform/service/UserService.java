@@ -1,6 +1,7 @@
 package com.streamingplatform.moviestreamingplatform.service;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.streamingplatform.moviestreamingplatform.model.Movie;
 import com.streamingplatform.moviestreamingplatform.model.User;
 import com.streamingplatform.moviestreamingplatform.repository.UserRepository;
 
@@ -21,11 +22,8 @@ public class UserService implements IUserService {
     @Override
     public User save(User theUser) {
         theUser.setId(0);
-
         theUser.setCreationDate(new Date(System.currentTimeMillis()));
-
         userRepository.save(theUser);
-
         return userRepository.getById(theUser.getId());
     }
 
@@ -36,28 +34,22 @@ public class UserService implements IUserService {
 
     @Override
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    public User deleteById(long userId)
-    {
-        User theUser = userRepository.findById(userId).get();
-
+    public User deleteById(long userId) {
+        User theUser = userRepository.findById(userId)
+                                     .get();
         userRepository.deleteById(userId);
-
         return theUser;
     }
 
     @Override
     public User findById(long userId) {
         Optional<User> result = userRepository.findById(userId);
-
         User theUser = null;
-
-        if(result.isPresent()){
+        if (result.isPresent()) {
             theUser = result.get();
-        }
-        else{
+        } else {
             throw new RuntimeException("Did not find employee id - " + userId);
         }
-
         return theUser;
     }
 }
