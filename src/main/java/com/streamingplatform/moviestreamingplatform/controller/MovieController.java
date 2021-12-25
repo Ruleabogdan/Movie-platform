@@ -23,38 +23,29 @@ public class MovieController {
 
     private MovieService movieService;
 
-    @PostMapping("/")
-    public Movie addMovie(@RequestBody Movie theMovie){
-
-        // if they pass an id in JSON
+    @PostMapping
+    public Movie addMovie(@RequestBody Movie theMovie) {
         theMovie.setId(0);
-
         movieService.save(theMovie);
-
         return theMovie;
     }
 
-    @GetMapping("/")
-    public List<Movie> getMovies(){
+    @GetMapping
+    public List<Movie> getMovies() {
         List<Movie> theMovies = movieService.findAll();
-
         return theMovies;
     }
 
     @GetMapping("/{movieId}")
-    public Movie getMovieById(@PathVariable long movieId){
-
+    public Movie getMovieById(@PathVariable long movieId) {
         Movie theMovie = movieService.getById(movieId);
-
         return theMovie;
     }
 
     @DeleteMapping("/{movieId}")
-    public Movie deleteMovieById(@PathVariable long movieId){
-        Movie theMovie =  movieService.getById(movieId);
-
+    public Movie deleteMovieById(@PathVariable long movieId) {
+        Movie theMovie = movieService.getById(movieId);
         movieService.deleteById(movieId);
-
         return theMovie;
     }
 }

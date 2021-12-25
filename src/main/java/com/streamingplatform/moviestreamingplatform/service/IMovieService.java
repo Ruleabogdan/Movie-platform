@@ -5,6 +5,7 @@ import com.streamingplatform.moviestreamingplatform.model.Movie;
 import java.util.List;
 
 public interface IMovieService {
+
     public Movie save(Movie theMovie);
 
     public Movie getById(long theId);

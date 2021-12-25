@@ -3,7 +3,6 @@ package com.streamingplatform.moviestreamingplatform.controller;
 import com.streamingplatform.moviestreamingplatform.model.User;
 import com.streamingplatform.moviestreamingplatform.service.UserService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,13 +22,12 @@ import lombok.AllArgsConstructor;
 public class UserController {
 
     private UserService userService;
-
-    @GetMapping("/")
+    @GetMapping
     public List<User> getUsers() {
         return userService.findAll();
     }
 
-    @PostMapping("/")
+    @PostMapping
     public User addUser(@RequestBody User theUser) {
         return userService.save(theUser);
     }
@@ -45,4 +43,5 @@ public class UserController {
         User theUser = userService.deleteById(userId);
         return theUser;
     }
+
 }
