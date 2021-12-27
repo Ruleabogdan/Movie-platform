@@ -1,7 +1,7 @@
 package com.streamingplatform.moviestreamingplatform.controller;
 
 import com.streamingplatform.moviestreamingplatform.model.Movie;
-import com.streamingplatform.moviestreamingplatform.service.MovieService;
+import com.streamingplatform.moviestreamingplatform.service.IMovieService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,11 +21,11 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/movies")
 public class MovieController {
 
-    private MovieService movieService;
+    private IMovieService movieService;
 
     @PostMapping
     public Movie addMovie(@RequestBody Movie theMovie) {
-        theMovie.setId(0);
+
         movieService.save(theMovie);
         return theMovie;
     }

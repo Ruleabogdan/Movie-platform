@@ -1,29 +1,37 @@
 package com.streamingplatform.moviestreamingplatform.service;
 
 import com.streamingplatform.moviestreamingplatform.model.Movie;
+import com.streamingplatform.moviestreamingplatform.model.User;
 import com.streamingplatform.moviestreamingplatform.repository.MovieRepository;
+import com.streamingplatform.moviestreamingplatform.repository.UserRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @AllArgsConstructor
+@Transactional
+@Slf4j
 public class MovieService implements IMovieService {
 
     private MovieRepository movieRepository;
+    private UserRepository userRepository;
     private UserService userService;
-
     @Override
     public Movie save(Movie theMovie) {
-        theMovie.setId(0);
-        theMovie.setUser(userService.findById(1));
+        theMovie.setId(null);
+        User user = userService.getCurrentUser();
+        user.addMovie(theMovie);
         movieRepository.save(theMovie);
-        theMovie = movieRepository.getById(theMovie.getId());
+        log.info("Saving movie to database {}", theMovie.getTitle());
         return theMovie;
     }
 
