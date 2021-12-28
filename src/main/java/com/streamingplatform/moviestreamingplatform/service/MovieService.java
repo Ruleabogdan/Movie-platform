@@ -1,9 +1,18 @@
 package com.streamingplatform.moviestreamingplatform.service;
 
 import com.streamingplatform.moviestreamingplatform.model.Movie;
+<<<<<<< Updated upstream
+=======
+import com.streamingplatform.moviestreamingplatform.model.User;
+import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
+import com.streamingplatform.moviestreamingplatform.model.dto.mapper.ImyMapper;
+>>>>>>> Stashed changes
 import com.streamingplatform.moviestreamingplatform.repository.MovieRepository;
 
+<<<<<<< Updated upstream
 import org.springframework.beans.factory.annotation.Autowired;
+=======
+>>>>>>> Stashed changes
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +26,7 @@ public class MovieService implements IMovieService {
 
     private MovieRepository movieRepository;
     private UserService userService;
+<<<<<<< Updated upstream
 
     @Override
     public Movie save(Movie theMovie) {
@@ -25,10 +35,22 @@ public class MovieService implements IMovieService {
         movieRepository.save(theMovie);
         theMovie = movieRepository.getById(theMovie.getId());
         return theMovie;
+=======
+    private ImyMapper myMapper;
+
+    @Override
+    public MovieDto save(Movie theMovie) {
+        theMovie.setId(null);
+        User user = userService.getCurrentUser();
+        user.addMovie(theMovie);
+        movieRepository.save(theMovie);
+        log.info("Saving movie to database {}", theMovie.getTitle());
+        return myMapper.movieToMovieDto(theMovie);
+>>>>>>> Stashed changes
     }
 
     @Override
-    public Movie getById(long theId) {
+    public MovieDto getById(long theId) {
         Optional<Movie> result = movieRepository.findById(theId);
         Movie theMovie = null;
         if (result.isPresent()) {
@@ -36,18 +58,18 @@ public class MovieService implements IMovieService {
         } else {
             throw new RuntimeException("Did not find the movie with the id - " + theId);
         }
-        return theMovie;
+        return myMapper.movieToMovieDto(theMovie);
     }
 
     @Override
-    public Movie deleteById(long theId) {
+    public MovieDto deleteById(long theId) {
         Movie theMovie = movieRepository.getById(theId);
         movieRepository.deleteById(theId);
-        return theMovie;
+        return myMapper.movieToMovieDto(theMovie);
     }
 
     @Override
-    public List<Movie> findAll() {
-        return movieRepository.findAll();
+    public List<MovieDto> findAll() {
+        return myMapper.listAllMoviesDto(movieRepository.findAll());
     }
 }

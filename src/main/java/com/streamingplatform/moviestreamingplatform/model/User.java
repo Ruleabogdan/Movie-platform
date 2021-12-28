@@ -1,6 +1,14 @@
 package com.streamingplatform.moviestreamingplatform.model;
 
+<<<<<<< Updated upstream
+=======
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import java.util.ArrayList;
+import java.util.Collection;
+>>>>>>> Stashed changes
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +46,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "favorite_genre")
     private Genres favoriteGenre;
+<<<<<<< Updated upstream
 
     public User(String username,
                 String password,
@@ -47,5 +56,23 @@ public class User {
         this.password = password;
         this.creationDate = creationDate;
         this.favoriteGenre = favoriteGenre;
+=======
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles = new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @JoinTable(name = "user_watchlist", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "movie_id"))
+    private List<Movie> movieCollection = new ArrayList<>();
+    @JsonManagedReference
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    private Collection<Movie> movies = new ArrayList<>();
+
+    public void addMovie(Movie movie) {
+        if (movies == null) {
+            movies = new ArrayList<>();
+        }
+        movie.setUser(this);
+        movies.add(movie);
+>>>>>>> Stashed changes
     }
 }

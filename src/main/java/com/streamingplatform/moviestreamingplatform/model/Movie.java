@@ -1,10 +1,16 @@
 package com.streamingplatform.moviestreamingplatform.model;
 
+<<<<<<< Updated upstream
 import java.sql.Date;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+=======
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import java.util.Date;
+>>>>>>> Stashed changes
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -43,9 +49,16 @@ public class Movie {
     private Date realeaseDate;
     @Column(name = "rating")
     private Double rating;
+<<<<<<< Updated upstream
     @Column(name = "genres")
     private EnumSet<Genres> genres;
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+=======
+    @Enumerated(EnumType.STRING)
+    private Genres genres;
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+>>>>>>> Stashed changes
     @JoinColumn(name = "user_id")
     private User user;
 

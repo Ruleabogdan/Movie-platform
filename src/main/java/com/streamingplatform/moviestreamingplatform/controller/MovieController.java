@@ -1,7 +1,12 @@
 package com.streamingplatform.moviestreamingplatform.controller;
 
 import com.streamingplatform.moviestreamingplatform.model.Movie;
+<<<<<<< Updated upstream
 import com.streamingplatform.moviestreamingplatform.service.MovieService;
+=======
+import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
+import com.streamingplatform.moviestreamingplatform.service.IMovieService;
+>>>>>>> Stashed changes
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,27 +30,26 @@ public class MovieController {
 
     @PostMapping
     public Movie addMovie(@RequestBody Movie theMovie) {
+<<<<<<< Updated upstream
         theMovie.setId(0);
+=======
+>>>>>>> Stashed changes
         movieService.save(theMovie);
         return theMovie;
     }
 
     @GetMapping
-    public List<Movie> getMovies() {
-        List<Movie> theMovies = movieService.findAll();
-        return theMovies;
+    public List<MovieDto> getMovies() {
+        return movieService.findAll();
     }
 
     @GetMapping("/{movieId}")
-    public Movie getMovieById(@PathVariable long movieId) {
-        Movie theMovie = movieService.getById(movieId);
-        return theMovie;
+    public MovieDto getMovieById(@PathVariable long movieId) {
+        return movieService.getById(movieId);
     }
 
     @DeleteMapping("/{movieId}")
-    public Movie deleteMovieById(@PathVariable long movieId) {
-        Movie theMovie = movieService.getById(movieId);
-        movieService.deleteById(movieId);
-        return theMovie;
+    public MovieDto deleteMovieById(@PathVariable long movieId) {
+        return movieService.deleteById(movieId);
     }
 }
