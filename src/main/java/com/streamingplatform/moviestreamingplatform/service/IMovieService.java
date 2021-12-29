@@ -1,16 +1,17 @@
 package com.streamingplatform.moviestreamingplatform.service;
 
 import com.streamingplatform.moviestreamingplatform.model.Movie;
+import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
 
 import java.util.List;
 
 public interface IMovieService {
 
-    public Movie save(Movie theMovie);
+    MovieDto save(Movie theMovie);
 
-    public Movie getById(long theId);
+    MovieDto getById(long theId);
 
-    public Movie deleteById(long theId);
+    MovieDto deleteById(long theId);
 
-    public List<Movie> findAll();
+    List<MovieDto> findAll();
 }
