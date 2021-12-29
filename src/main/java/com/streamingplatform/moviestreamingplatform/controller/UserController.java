@@ -1,27 +1,15 @@
 package com.streamingplatform.moviestreamingplatform.controller;
 
-<<<<<<< Updated upstream
 import com.streamingplatform.moviestreamingplatform.model.User;
 import com.streamingplatform.moviestreamingplatform.service.UserService;
-=======
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.streamingplatform.moviestreamingplatform.model.Movie;
 import com.streamingplatform.moviestreamingplatform.model.Role;
-import com.streamingplatform.moviestreamingplatform.model.User;
 import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
 import com.streamingplatform.moviestreamingplatform.model.dto.UserDto;
-import com.streamingplatform.moviestreamingplatform.service.IUserService;
->>>>>>> Stashed changes
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,15 +18,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-<<<<<<< Updated upstream
 import java.sql.Date;
-=======
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+
 import java.util.HashMap;
->>>>>>> Stashed changes
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -47,8 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
-import static java.util.Arrays.stream;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -59,19 +42,15 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class UserController {
 
     private UserService userService;
+
     @GetMapping
     public List<UserDto> getUsers() {
         return userService.findAll();
     }
 
-    @PostMapping
-<<<<<<< Updated upstream
-    public User addUser(@RequestBody User theUser) {
-        return userService.save(theUser);
-=======
+    @PostMapping("/register")
     public UserDto addUser(@RequestBody User theUser) {
         return userService.saveUser(theUser);
->>>>>>> Stashed changes
     }
 
     @GetMapping("/{userId}")
@@ -84,8 +63,6 @@ public class UserController {
         return userService.deleteById(userId);
     }
 
-<<<<<<< Updated upstream
-=======
     @PostMapping("/add-role")
     public User addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
         return userService.addRoleToUser(roleToUserForm.getUsername(), roleToUserForm.getRoleName());
@@ -96,7 +73,7 @@ public class UserController {
                                         @PathVariable long movieId) {
         if (userService.getCurrentUser()
                        .getId() != userId) {
-            throw new RuntimeException("You cannot add a movie from other's watchlists");
+            throw new RuntimeException("You cannot add a movie into other's watchlist");
         } else {
             return userService.addMovieToWatchlist(userId, movieId);
         }
@@ -112,7 +89,7 @@ public class UserController {
                                              @PathVariable long movieId) {
         if (userService.getCurrentUser()
                        .getId() != userId) {
-            throw new RuntimeException("You cannot delete a movie from other's watchlists");
+            throw new RuntimeException("You cannot delete a movie from other's watchlist");
         } else {
             return userService.deleteMovieFromWatchlist(userId, movieId);
         }
@@ -165,5 +142,4 @@ class RoleToUserForm {
 
     private String username;
     private String roleName;
->>>>>>> Stashed changes
 }

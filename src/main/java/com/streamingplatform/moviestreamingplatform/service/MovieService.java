@@ -1,42 +1,31 @@
 package com.streamingplatform.moviestreamingplatform.service;
 
 import com.streamingplatform.moviestreamingplatform.model.Movie;
-<<<<<<< Updated upstream
-=======
+
 import com.streamingplatform.moviestreamingplatform.model.User;
 import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
 import com.streamingplatform.moviestreamingplatform.model.dto.mapper.ImyMapper;
->>>>>>> Stashed changes
 import com.streamingplatform.moviestreamingplatform.repository.MovieRepository;
 
-<<<<<<< Updated upstream
-import org.springframework.beans.factory.annotation.Autowired;
-=======
->>>>>>> Stashed changes
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @AllArgsConstructor
+@Transactional
+@Slf4j
 public class MovieService implements IMovieService {
 
     private MovieRepository movieRepository;
     private UserService userService;
-<<<<<<< Updated upstream
-
-    @Override
-    public Movie save(Movie theMovie) {
-        theMovie.setId(0);
-        theMovie.setUser(userService.findById(1));
-        movieRepository.save(theMovie);
-        theMovie = movieRepository.getById(theMovie.getId());
-        return theMovie;
-=======
     private ImyMapper myMapper;
+
 
     @Override
     public MovieDto save(Movie theMovie) {
@@ -46,7 +35,6 @@ public class MovieService implements IMovieService {
         movieRepository.save(theMovie);
         log.info("Saving movie to database {}", theMovie.getTitle());
         return myMapper.movieToMovieDto(theMovie);
->>>>>>> Stashed changes
     }
 
     @Override

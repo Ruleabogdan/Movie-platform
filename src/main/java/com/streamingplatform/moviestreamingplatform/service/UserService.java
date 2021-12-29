@@ -1,37 +1,42 @@
 package com.streamingplatform.moviestreamingplatform.service;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.streamingplatform.moviestreamingplatform.model.Movie;
+import com.streamingplatform.moviestreamingplatform.model.Role;
 import com.streamingplatform.moviestreamingplatform.model.User;
-<<<<<<< Updated upstream
-=======
+
 import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
 import com.streamingplatform.moviestreamingplatform.model.dto.UserDto;
 import com.streamingplatform.moviestreamingplatform.model.dto.mapper.ImyMapper;
 import com.streamingplatform.moviestreamingplatform.repository.MovieRepository;
 import com.streamingplatform.moviestreamingplatform.repository.RoleRepository;
->>>>>>> Stashed changes
 import com.streamingplatform.moviestreamingplatform.repository.UserRepository;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @AllArgsConstructor
-public class UserService implements IUserService {
+@Transactional
+@Slf4j
+public class UserService implements IUserService, UserDetailsService {
 
     private UserRepository userRepository;
-<<<<<<< Updated upstream
-
-    @Override
-    public User save(User theUser) {
-        theUser.setId(0);
-=======
     private RoleRepository roleRepository;
     private MovieRepository movieRepository;
     private ImyMapper myMapper;
@@ -56,15 +61,11 @@ public class UserService implements IUserService {
     @Override
     public UserDto saveUser(User theUser) {
         theUser.setId(null);
->>>>>>> Stashed changes
-        theUser.setCreationDate(new Date(System.currentTimeMillis()));
+        theUser.setCreation_date(new Date(System.currentTimeMillis()));
+        theUser.setPassword(passwordEncoder.encode(theUser.getPassword()));
         userRepository.save(theUser);
-<<<<<<< Updated upstream
-        return userRepository.getById(theUser.getId());
-=======
         log.info("Saving new user to database: {}", theUser.getUsername());
         return myMapper.userToUserDto(userRepository.getById(theUser.getId()));
->>>>>>> Stashed changes
     }
 
     @Override
@@ -73,12 +74,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-<<<<<<< Updated upstream
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    public User deleteById(long userId) {
-=======
     public UserDto deleteById(long userId) {
->>>>>>> Stashed changes
         User theUser = userRepository.findById(userId)
                                      .get();
         userRepository.deleteById(userId);
@@ -96,8 +92,6 @@ public class UserService implements IUserService {
         }
         return myMapper.userToUserDto(theUser);
     }
-<<<<<<< Updated upstream
-=======
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -153,7 +147,6 @@ public class UserService implements IUserService {
         User user = userRepository.findByUsername(authentication.getName());
         return user;
     }
->>>>>>> Stashed changes
 }
 
 

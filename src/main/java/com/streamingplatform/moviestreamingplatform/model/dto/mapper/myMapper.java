@@ -58,8 +58,8 @@ public class myMapper implements ImyMapper {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setUsername(user.getUsername());
-        userDto.setCreationDate(user.getCreationDate());
-        userDto.setFavoriteGenre(user.getFavoriteGenre());
+        userDto.setCreationDate(user.getCreation_date());
+        userDto.setFavoriteGenre(user.getFavorite_genre());
         userDto.setRoles(allRoleToDtoList(user.getRoles()));
         return userDto;
     }

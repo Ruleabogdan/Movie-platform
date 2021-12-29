@@ -1,14 +1,10 @@
 package com.streamingplatform.moviestreamingplatform.controller;
 
 import com.streamingplatform.moviestreamingplatform.model.Movie;
-<<<<<<< Updated upstream
-import com.streamingplatform.moviestreamingplatform.service.MovieService;
-=======
 import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
 import com.streamingplatform.moviestreamingplatform.service.IMovieService;
->>>>>>> Stashed changes
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,14 +22,13 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/movies")
 public class MovieController {
 
-    private MovieService movieService;
+    private IMovieService movieService;
 
     @PostMapping
     public Movie addMovie(@RequestBody Movie theMovie) {
-<<<<<<< Updated upstream
-        theMovie.setId(0);
-=======
->>>>>>> Stashed changes
+
+        theMovie.setId(null);
+
         movieService.save(theMovie);
         return theMovie;
     }
