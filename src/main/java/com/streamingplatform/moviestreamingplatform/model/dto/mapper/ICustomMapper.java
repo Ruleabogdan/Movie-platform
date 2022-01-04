@@ -11,11 +11,10 @@ import com.streamingplatform.moviestreamingplatform.model.dto.UserIdDto;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;
 
-import java.util.Collection;
 import java.util.List;
 
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
-public interface ImyMapper {
+public interface ICustomMapper {
 
     RoleDto roleToRoleDto(Role role);
 

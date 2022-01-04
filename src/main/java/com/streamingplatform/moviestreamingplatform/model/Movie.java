@@ -22,6 +22,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,6 +45,7 @@ public class Movie {
     private Long id;
     @Column(name = "title")
     private String title;
+    @Temporal(TemporalType.DATE)
     @Column(name = "realease_date")
     private Date realeaseDate;
     @Column(name = "rating")

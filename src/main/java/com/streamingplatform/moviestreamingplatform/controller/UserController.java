@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @PostMapping("/add-role")
-    public User addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
+    public UserDto addRoleToUser(@RequestBody RoleToUserForm roleToUserForm) {
         return userService.addRoleToUser(roleToUserForm.getUsername(), roleToUserForm.getRoleName());
     }
 

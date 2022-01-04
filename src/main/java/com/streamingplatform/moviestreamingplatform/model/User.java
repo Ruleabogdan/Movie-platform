@@ -47,10 +47,10 @@ public class User {
     private String password;
     @Temporal(TemporalType.DATE)
     @Column(name = "creation_date")
-    private Date creation_date;
+    private Date creationDate;
     @Enumerated(EnumType.STRING)
     @Column(name = "favorite_genre")
-    private Genres favorite_genre;
+    private Genres favoriteGenre;
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
