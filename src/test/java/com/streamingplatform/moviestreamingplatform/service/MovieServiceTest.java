@@ -9,7 +9,6 @@ import com.streamingplatform.moviestreamingplatform.model.dto.mapper.CustomMappe
 import com.streamingplatform.moviestreamingplatform.repository.MovieRepository;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -33,17 +32,17 @@ import static org.mockito.Mockito.when;
 class MovieServiceTest {
 
     @InjectMocks
-    MovieService movieService;
+    private MovieService movieService;
     @Mock
-    MovieRepository movieRepository;
+    private MovieRepository movieRepository;
     @Mock
-    CustomMapper customMapper;
-
-    UserIdDto userIdDto = new UserIdDto();
-    User user = new User();
-    Movie movie = new Movie();
-    MovieDto movieDto = new MovieDto();
-    List<MovieDto> movieDtoList = new ArrayList<>();
+    private CustomMapper customMapper;
+    private UserIdDto userIdDto = new UserIdDto();
+    private User user = new User();
+    private Movie movie = new Movie();
+    private MovieDto movieDto = new MovieDto();
+    private List<MovieDto> movieDtoList = new ArrayList<>();
+    private List<Movie> movieList = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
@@ -57,18 +56,18 @@ class MovieServiceTest {
         movieDto.setRealeaseDate(new Date(1994, 12, 12));
         movieDto.setUserIdDto(userIdDto);
         movieDtoList.add(movieDto);
+        user.setId(1L);
+        movie.setId(1L);
+        movie.setGenres(Genres.ACTION);
+        movie.setRating(7.1);
+        movie.setRealeaseDate(new Date(1994, 12, 12));
+        movie.setTitle("Home Alone");
+        movie.setUser(user);
+        movieList.add(movie);
     }
 
     @Test
     void testFindById() {
-        user.setId(1L);
-        Movie movie = new Movie();
-        movie.setId(1L);
-        movie.setGenres(Genres.ACTION);
-        movie.setRating(7.1);
-        movie.setRealeaseDate(new Date(1994, 12,12));
-        movie.setTitle("Home Alone");
-        movie.setUser(user);
         when(movieRepository.findById(1L)).thenReturn(Optional.of(movie));
         MovieDto result = movieService.findById(1L);
         assertNotNull(result);
@@ -79,37 +78,16 @@ class MovieServiceTest {
 
     @Test
     void testDeleteById() {
-        user.setId(1L);
-        Movie movie = new Movie();
-        movie.setId(1L);
-        movie.setGenres(Genres.ACTION);
-        movie.setRating(7.1);
-        movie.setRealeaseDate(new Date(1994, 12,12));
-        movie.setTitle("Home Alone");
-        movie.setUser(user);
         when(movieRepository.findById(1L)).thenReturn(Optional.of(movie));
-        MovieDto result=movieService.deleteById(movie.getId());
+        MovieDto result = movieService.deleteById(movie.getId());
         assertNotNull(result);
     }
 
     @Test
     void testFindAll() {
-        List<Movie> movieList = new ArrayList<>();
-        user.setId(1L);
-        Movie movie = new Movie();
-        movie.setId(1L);
-        movie.setGenres(Genres.ACTION);
-        movie.setRating(7.1);
-        movie.setRealeaseDate(new Date(1994, 12,12));
-        movie.setTitle("Home Alone");
-        movie.setUser(user);
-        movieList.add(movie);
         when(movieRepository.findAll()).thenReturn(movieList);
         when(customMapper.listAllMoviesDto(movieList)).thenReturn(movieDtoList);
-
         List<MovieDto> result = movieService.findAll();
         assertNotNull(result);
-
-
     }
 }

@@ -29,6 +29,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.NonUniqueResultException;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -52,7 +54,7 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Override
     public UserDto addRoleToUser(String userName,
-                              String roleName) {
+                              String roleName){
         User user = userRepository.findByUsername(userName);
         Role role = roleRepository.findByName(roleName);
         user.getRoles()
@@ -145,8 +147,11 @@ public class UserService implements IUserService, UserDetailsService {
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
-        User user = userRepository.findByUsername(authentication.getName());
-        return user;
+        if(authentication != null){
+            User user = userRepository.findByUsername(authentication.getName());
+            return user;}
+        else
+            return userRepository.getById(1L);
     }
 }
 

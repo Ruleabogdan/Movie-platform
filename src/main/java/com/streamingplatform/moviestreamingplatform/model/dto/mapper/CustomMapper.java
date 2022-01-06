@@ -10,6 +10,7 @@ import com.streamingplatform.moviestreamingplatform.model.dto.UserIdDto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -31,11 +32,13 @@ public class CustomMapper implements ICustomMapper {
         if (roles == null) {
             return null;
         }
-        List<RoleDto> roleDtos = new ArrayList<RoleDto>(roles.size());
-        for (Role role : roles) {
-            roleDtos.add(roleToRoleDto(role));
-        }
-        return roleDtos;
+        return roles.stream()
+                    .map(s -> {
+                        RoleDto roleDto = new RoleDto();
+                        roleDto.setName(s.getName());
+                        return roleDto;
+                    })
+                    .collect(Collectors.toList());
     }
 
     @Override
@@ -82,11 +85,10 @@ public class CustomMapper implements ICustomMapper {
         if (users == null) {
             return null;
         }
-        List<UserDto> list = new ArrayList<UserDto>(users.size());
-        for (User user : users) {
-            list.add(userToUserDto(user));
-        }
-        return list;
+        return users.stream()
+                    .map(s -> userToUserDto(s)
+                    )
+                    .collect(Collectors.toList());
     }
 
     @Override
@@ -94,10 +96,8 @@ public class CustomMapper implements ICustomMapper {
         if (movies == null) {
             return null;
         }
-        List<MovieDto> list = new ArrayList<MovieDto>(movies.size());
-        for (Movie movie : movies) {
-            list.add(movieToMovieDto(movie));
-        }
-        return list;
+        return movies.stream()
+                     .map(s -> movieToMovieDto(s))
+                     .collect(Collectors.toList());
     }
 }

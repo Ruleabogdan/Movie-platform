@@ -33,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
             .passwordEncoder(bCryptPasswordEncoder);
+
     }
 
     @Override
@@ -44,14 +45,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
-            .antMatchers("/login/**", "/users/token/refresh/**")
+            .antMatchers("/login/**", "/users/token/refresh/**", "/users/register")
             .permitAll()
             .antMatchers("/users/**/watchlist/**")
             .permitAll()
             .antMatchers(GET, "/users/**")
             .hasAnyAuthority("ROLE_ADMIN")
-            .antMatchers(POST, "/users")
-            .hasAnyAuthority("ROLE_ADMIN")
+//            .antMatchers(POST, "/users")
+//            .hasAnyAuthority("ROLE_ADMIN")
             .antMatchers(DELETE, "/users/**")
             .hasAnyAuthority("ROLE_ADMIN")
             .antMatchers(GET, "/movies/**")
