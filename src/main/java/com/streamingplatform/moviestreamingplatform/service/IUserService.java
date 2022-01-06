@@ -19,7 +19,7 @@ public interface IUserService {
 
     Role saveRole(Role role);
 
-    User addRoleToUser(String userName,
+    UserDto addRoleToUser(String userName,
                        String roleName);
 
     MovieDto addMovieToWatchlist(long userId,

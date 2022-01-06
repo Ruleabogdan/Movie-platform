@@ -9,7 +9,7 @@ public interface IMovieService {
 
     MovieDto save(Movie theMovie);
 
-    MovieDto getById(long theId);
+    MovieDto findById(long theId);
 
     MovieDto deleteById(long theId);
 

@@ -10,15 +10,10 @@ import lombok.Data;
 @Data
 public class MovieDto {
 
-    @JsonProperty("id")
     private Long id;
-    @JsonProperty("title")
     private String title;
-    @JsonProperty("realeaseDate")
-    private Date releaseDate;
-    @JsonProperty("rating")
+    private Date realeaseDate;
     private Double rating;
-    @JsonProperty("genres")
     private Genres genres;
     @JsonProperty("user")
     private UserIdDto userIdDto;

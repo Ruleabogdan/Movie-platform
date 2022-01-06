@@ -11,12 +11,10 @@ import com.streamingplatform.moviestreamingplatform.model.dto.UserIdDto;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.processing.Generated;
-
 import org.springframework.stereotype.Component;
 
 @Component
-public class myMapper implements ImyMapper {
+public class CustomMapper implements ICustomMapper {
 
     @Override
     public RoleDto roleToRoleDto(Role role) {
@@ -58,8 +56,8 @@ public class myMapper implements ImyMapper {
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setUsername(user.getUsername());
-        userDto.setCreationDate(user.getCreation_date());
-        userDto.setFavoriteGenre(user.getFavorite_genre());
+        userDto.setCreationDate(user.getCreationDate());
+        userDto.setFavoriteGenre(user.getFavoriteGenre());
         userDto.setRoles(allRoleToDtoList(user.getRoles()));
         return userDto;
     }
@@ -74,7 +72,7 @@ public class myMapper implements ImyMapper {
         movieDto.setTitle(movie.getTitle());
         movieDto.setRating(movie.getRating());
         movieDto.setGenres(movie.getGenres());
-        movieDto.setReleaseDate(movie.getRealeaseDate());
+        movieDto.setRealeaseDate(movie.getRealeaseDate());
         movieDto.setUserIdDto(userToUserIdDto(movie.getUser()));
         return movieDto;
     }

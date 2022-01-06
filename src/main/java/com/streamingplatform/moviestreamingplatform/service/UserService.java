@@ -6,11 +6,13 @@ import com.streamingplatform.moviestreamingplatform.model.User;
 
 import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
 import com.streamingplatform.moviestreamingplatform.model.dto.UserDto;
-import com.streamingplatform.moviestreamingplatform.model.dto.mapper.ImyMapper;
+import com.streamingplatform.moviestreamingplatform.model.dto.mapper.CustomMapper;
+import com.streamingplatform.moviestreamingplatform.model.dto.mapper.ICustomMapper;
 import com.streamingplatform.moviestreamingplatform.repository.MovieRepository;
 import com.streamingplatform.moviestreamingplatform.repository.RoleRepository;
 import com.streamingplatform.moviestreamingplatform.repository.UserRepository;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -39,7 +41,7 @@ public class UserService implements IUserService, UserDetailsService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private MovieRepository movieRepository;
-    private ImyMapper myMapper;
+    private ICustomMapper customMapper;
     private PasswordEncoder passwordEncoder;
 
     @Override
@@ -49,28 +51,27 @@ public class UserService implements IUserService, UserDetailsService {
     }
 
     @Override
-    public User addRoleToUser(String userName,
+    public UserDto addRoleToUser(String userName,
                               String roleName) {
         User user = userRepository.findByUsername(userName);
         Role role = roleRepository.findByName(roleName);
         user.getRoles()
             .add(role);
-        return user;
+        return customMapper.userToUserDto(user);
     }
 
     @Override
     public UserDto saveUser(User theUser) {
-        theUser.setId(null);
-        theUser.setCreation_date(new Date(System.currentTimeMillis()));
+        theUser.setCreationDate(new Date(System.currentTimeMillis()));
         theUser.setPassword(passwordEncoder.encode(theUser.getPassword()));
         userRepository.save(theUser);
         log.info("Saving new user to database: {}", theUser.getUsername());
-        return myMapper.userToUserDto(userRepository.getById(theUser.getId()));
+        return customMapper.userToUserDto(userRepository.getById(theUser.getId()));
     }
 
     @Override
     public List<UserDto> findAll() {
-        return myMapper.listAllUsersDto(userRepository.findAll());
+        return customMapper.listAllUsersDto(userRepository.findAll());
     }
 
     @Override
@@ -78,19 +79,19 @@ public class UserService implements IUserService, UserDetailsService {
         User theUser = userRepository.findById(userId)
                                      .get();
         userRepository.deleteById(userId);
-        return myMapper.userToUserDto(theUser);
+        return customMapper.userToUserDto(theUser);
     }
 
     @Override
     public UserDto findById(long userId) {
         Optional<User> result = userRepository.findById(userId);
-        User theUser = null;
+        User theUser;
         if (result.isPresent()) {
             theUser = result.get();
         } else {
             throw new RuntimeException("Did not find employee id - " + userId);
         }
-        return myMapper.userToUserDto(theUser);
+        return customMapper.userToUserDto(theUser);
     }
 
     @Override
@@ -117,13 +118,13 @@ public class UserService implements IUserService, UserDetailsService {
         Movie movie = movieRepository.getById(movieId);
         user.getMovieCollection()
             .add(movie);
-        return myMapper.movieToMovieDto(movie);
+        return customMapper.movieToMovieDto(movie);
     }
 
     @Override
     public List<MovieDto> showWatchlist(long userId) {
         User user = userRepository.getById(userId);
-        return myMapper.listAllMoviesDto(user.getMovieCollection());
+        return customMapper.listAllMoviesDto(user.getMovieCollection());
     }
 
     @Override
@@ -133,7 +134,7 @@ public class UserService implements IUserService, UserDetailsService {
         Movie movie = movieRepository.getById(movieId);
         user.getMovieCollection()
             .remove(movie);
-        return myMapper.movieToMovieDto(movie);
+        return customMapper.movieToMovieDto(movie);
     }
 
     @Override

@@ -7,6 +7,5 @@ import lombok.Data;
 @Data
 public class UserIdDto {
 
-    @JsonProperty("id")
     private Long id;
 }

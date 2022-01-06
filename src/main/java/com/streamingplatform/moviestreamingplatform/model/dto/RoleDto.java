@@ -7,6 +7,5 @@ import lombok.Data;
 @Data
 public class RoleDto {
 
-    @JsonProperty("name")
     private String name;
 }

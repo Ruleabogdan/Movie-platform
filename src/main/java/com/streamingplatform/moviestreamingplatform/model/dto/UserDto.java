@@ -17,14 +17,9 @@ import lombok.Setter;
 @Data
 public class UserDto {
 
-    @JsonProperty("id")
     private Long id;
-    @JsonProperty("username")
     private String username;
-    @JsonProperty("creationDate")
     private Date creationDate;
-    @JsonProperty("favoriteGenre")
     private Genres favoriteGenre;
-    @JsonProperty("roles")
     private List<RoleDto> roles;
 }

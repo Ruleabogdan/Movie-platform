@@ -30,17 +30,17 @@ public class MovieStreamingPlatformApplication {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    CommandLineRunner run(UserService userService) {
-        return args -> {
-            userService.saveRole(new Role(null, "ROLE_USER"));
-            userService.saveRole(new Role(null, "ROLE_ADMIN"));
-            userService.saveUser(new User(null, "vlad", "12345", null, ACTION, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
-            userService.saveUser(new User(null, "marc", "12345", null, COMEDY, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
-            userService.saveUser(new User(null, "florin", "12345", null, DRAMA, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
-            userService.addRoleToUser("vlad", "ROLE_USER");
-            userService.addRoleToUser("marc", "ROLE_ADMIN");
-            userService.addRoleToUser("florin", "ROLE_USER");
-        };
-    }
+//    @Bean
+//    CommandLineRunner run(UserService userService) {
+//        return args -> {
+//            userService.saveRole(new Role(null, "ROLE_USER"));
+//            userService.saveRole(new Role(null, "ROLE_ADMIN"));
+//            userService.saveUser(new User(null, "vlad", "12345", null, ACTION, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+//            userService.saveUser(new User(null, "marc", "12345", null, COMEDY, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+//            userService.saveUser(new User(null, "florin", "12345", null, DRAMA, new ArrayList<>(), new ArrayList<>(), new ArrayList<>()));
+//            userService.addRoleToUser("vlad", "ROLE_USER");
+//            userService.addRoleToUser("marc", "ROLE_ADMIN");
+//            userService.addRoleToUser("florin", "ROLE_USER");
+//        };
+//    }
 }
