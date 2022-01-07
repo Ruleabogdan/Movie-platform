@@ -10,10 +10,12 @@ import com.streamingplatform.moviestreamingplatform.service.MovieService;
 import com.streamingplatform.moviestreamingplatform.service.UserService;
 
 import org.springframework.boot.CommandLineRunner;
-
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.context.support.ServletContextAttributeFactoryBean;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,6 +35,8 @@ public class MovieStreamingPlatformApplication {
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
+
 
 //    @Bean
 //    CommandLineRunner run(UserService userService, MovieService movieService) {

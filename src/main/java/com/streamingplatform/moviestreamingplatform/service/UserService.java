@@ -1,18 +1,16 @@
 package com.streamingplatform.moviestreamingplatform.service;
 
+import com.streamingplatform.moviestreamingplatform.exceptions.ResourceFoundException;
 import com.streamingplatform.moviestreamingplatform.model.Movie;
 import com.streamingplatform.moviestreamingplatform.model.Role;
 import com.streamingplatform.moviestreamingplatform.model.User;
-
 import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
 import com.streamingplatform.moviestreamingplatform.model.dto.UserDto;
-import com.streamingplatform.moviestreamingplatform.model.dto.mapper.CustomMapper;
 import com.streamingplatform.moviestreamingplatform.model.dto.mapper.ICustomMapper;
 import com.streamingplatform.moviestreamingplatform.repository.MovieRepository;
 import com.streamingplatform.moviestreamingplatform.repository.RoleRepository;
 import com.streamingplatform.moviestreamingplatform.repository.UserRepository;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-
-import javax.persistence.NonUniqueResultException;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,7 +50,7 @@ public class UserService implements IUserService, UserDetailsService {
 
     @Override
     public UserDto addRoleToUser(String userName,
-                              String roleName){
+                                 String roleName) {
         User user = userRepository.findByUsername(userName);
         Role role = roleRepository.findByName(roleName);
         user.getRoles()
@@ -118,6 +114,10 @@ public class UserService implements IUserService, UserDetailsService {
                                         long movieId) {
         User user = userRepository.getById(userId);
         Movie movie = movieRepository.getById(movieId);
+
+        if(user.getMovieCollection().contains(movie)){
+            throw new ResourceFoundException("You already have the movie with id: "  + movieId + " in your watchlist");
+        }
         user.getMovieCollection()
             .add(movie);
         return customMapper.movieToMovieDto(movie);
@@ -147,11 +147,11 @@ public class UserService implements IUserService, UserDetailsService {
     public User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext()
                                                              .getAuthentication();
-        if(authentication != null){
-            User user = userRepository.findByUsername(authentication.getName());
-            return user;}
-        else
+        if (authentication != null) {
+            return userRepository.findByUsername(authentication.getName());
+        } else {
             return userRepository.getById(1L);
+        }
     }
 }
 

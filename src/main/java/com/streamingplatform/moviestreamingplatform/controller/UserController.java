@@ -1,5 +1,6 @@
 package com.streamingplatform.moviestreamingplatform.controller;
 
+import com.streamingplatform.moviestreamingplatform.exceptions.ResourceNotFoundException;
 import com.streamingplatform.moviestreamingplatform.model.User;
 import com.streamingplatform.moviestreamingplatform.service.UserService;
 import com.auth0.jwt.JWT;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.streamingplatform.moviestreamingplatform.model.Role;
 import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
 import com.streamingplatform.moviestreamingplatform.model.dto.UserDto;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.sql.Date;
 import java.io.IOException;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ public class UserController {
 
     private UserService userService;
 
+
     @GetMapping
     public List<UserDto> getUsers() {
         return userService.findAll();
@@ -55,12 +57,20 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public UserDto getUserById(@PathVariable long userId) {
-        return userService.findById(userId);
+        try {
+            return userService.findById(userId);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("There is no user with id: " + userId);
+        }
     }
 
     @DeleteMapping("/{userId}")
     public UserDto deleteUser(@PathVariable long userId) {
-        return userService.deleteById(userId);
+        try {
+            return userService.deleteById(userId);
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("There is no user with id: " + userId);
+        }
     }
 
     @PostMapping("/add-role")
@@ -81,7 +91,11 @@ public class UserController {
 
     @GetMapping("/{userId}/watchlist")
     public List<MovieDto> showUserWatchlist(@PathVariable long userId) {
-        return userService.showWatchlist(userId);
+        try {
+            return userService.showWatchlist(userId);
+        }catch (Exception e){
+            throw new ResourceNotFoundException("There is no user with id: " + userId);
+        }
     }
 
     @DeleteMapping("/{userId}/watchlist/{movieId}")
