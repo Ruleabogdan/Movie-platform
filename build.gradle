@@ -28,7 +28,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-test'
     implementation 'com.auth0:java-jwt:3.18.2'
-    runtimeOnly 'com.h2database:h2:2.0.202'
+    testRuntimeOnly 'com.h2database:h2:2.0.202'
 }
 
 test {

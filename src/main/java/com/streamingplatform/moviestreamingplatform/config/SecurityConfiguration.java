@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -23,6 +24,7 @@ import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @AllArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -33,6 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
             .passwordEncoder(bCryptPasswordEncoder);
+
     }
 
     @Override
@@ -44,14 +47,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests()
-            .antMatchers("/login/**", "/users/token/refresh/**")
+            .antMatchers("/login/**", "/users/token/refresh/**", "/users/register")
             .permitAll()
             .antMatchers("/users/**/watchlist/**")
             .permitAll()
             .antMatchers(GET, "/users/**")
             .hasAnyAuthority("ROLE_ADMIN")
-            .antMatchers(POST, "/users")
-            .hasAnyAuthority("ROLE_ADMIN")
+//            .antMatchers(POST, "/users")
+//            .hasAnyAuthority("ROLE_ADMIN")
             .antMatchers(DELETE, "/users/**")
             .hasAnyAuthority("ROLE_ADMIN")
             .antMatchers(GET, "/movies/**")

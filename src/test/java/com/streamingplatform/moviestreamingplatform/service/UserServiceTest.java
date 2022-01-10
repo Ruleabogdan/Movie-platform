@@ -11,9 +11,7 @@ import com.streamingplatform.moviestreamingplatform.repository.MovieRepository;
 import com.streamingplatform.moviestreamingplatform.repository.RoleRepository;
 import com.streamingplatform.moviestreamingplatform.repository.UserRepository;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -41,34 +39,34 @@ import static org.mockito.Mockito.when;
 class UserServiceTest {
 
     @InjectMocks
-    UserService userService;
+    private UserService userService;
     @Mock
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Mock
     CustomMapper customMapper;
     @Mock
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
     @Mock
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     @Mock
-    MovieRepository movieRepository;
-    User user = new User();
-    UserDto userDto = new UserDto();
-    List<UserDto> userDtoList = new ArrayList<>();
+    private MovieRepository movieRepository;
+    private User user = new User();
+    private UserDto userDto = new UserDto();
+    private List<UserDto> userDtoList = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
+    private Movie movie = new Movie();
+    private MovieDto movieDto = new MovieDto();
+    private List<MovieDto> movieDtoList = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
         when(customMapper.userToUserDto(any())).thenReturn(userDto);
-
         userDto.setId(1L);
         userDto.setUsername("marcelpavel");
         userDto.setCreationDate(new Date(System.currentTimeMillis()));
         userDto.setFavoriteGenre(Genres.ACTION);
         userDtoList.add(userDto);
-    }
-
-    @Test
-    void testGetUser() {
+        users = new ArrayList<>();
         Date currentDate = new Date(System.currentTimeMillis());
         user = new User();
         user.setId(1L);
@@ -76,6 +74,27 @@ class UserServiceTest {
         user.setPassword("12345");
         user.setCreationDate(currentDate);
         user.setFavoriteGenre(Genres.ACTION);
+        users.add(user);
+        movie = new Movie();
+        movie.setId(1L);
+        movie.setTitle("Home Alone");
+        movie.setGenres(COMEDY);
+        movie.setRating(7.1);
+        movie.setRealeaseDate(new Date(1992, 12, 12));
+        movieDto = new MovieDto();
+        movieDto.setId(1L);
+        movieDto.setGenres(COMEDY);
+        movieDto.setTitle("Home Alone");
+        movieDto.setRating(7.1);
+        movieDto.setRealeaseDate(new Date(1992, 12, 12));
+        user.getMovieCollection()
+            .add(movie);
+        movieDtoList = new ArrayList<>();
+        movieDtoList.add(movieDto);
+    }
+
+    @Test
+    void testGetUser() {
         when(userRepository.findByUsername("marcelpavel")).thenReturn(user);
         User theUser = userService.getUser("marcelpavel");
         assertNotNull(theUser);
@@ -99,11 +118,6 @@ class UserServiceTest {
 
     @Test
     void testSaveUser() {
-        user.setId(1L);
-        user.setUsername("marcelpavel");
-        user.setPassword("12345");
-        user.setCreationDate(new Date(System.currentTimeMillis()));
-        user.setFavoriteGenre(Genres.ACTION);
         when(userRepository.save(any())).thenReturn(user);
         UserDto userDto = userService.saveUser(user);
         assertNotNull(userDto);
@@ -114,14 +128,6 @@ class UserServiceTest {
 
     @Test
     void testFindAll() {
-        List<User> users = new ArrayList<User>();
-        Date currentDate = new Date(System.currentTimeMillis());
-        user.setId(1L);
-        user.setUsername("marcelpavel");
-        user.setPassword("12345");
-        user.setCreationDate(currentDate);
-        user.setFavoriteGenre(Genres.ACTION);
-        users.add(user);
         when(userRepository.findAll()).thenReturn(users);
         when(customMapper.listAllUsersDto(users)).thenReturn(userDtoList);
         userDtoList = userService.findAll();
@@ -137,12 +143,6 @@ class UserServiceTest {
 
     @Test
     void testDeleteById() {
-        Date currentDate = new Date(System.currentTimeMillis());
-        user.setId(1L);
-        user.setUsername("marcelpavel");
-        user.setPassword("12345");
-        user.setCreationDate(currentDate);
-        user.setFavoriteGenre(Genres.ACTION);
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         UserDto userDto = userService.deleteById(user.getId());
         verify(userRepository, times(1)).deleteById(user.getId());
@@ -151,12 +151,6 @@ class UserServiceTest {
 
     @Test
     void testFindById() {
-        Date currentDate = new Date(System.currentTimeMillis());
-        user.setId(1L);
-        user.setUsername("marcelpavel");
-        user.setPassword("12345");
-        user.setCreationDate(currentDate);
-        user.setFavoriteGenre(Genres.ACTION);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         UserDto userDto = userService.findById(1);
         assertNotNull(userDto);
@@ -166,104 +160,43 @@ class UserServiceTest {
 
     @Test
     void addMovieToWatchlist() {
-        user = new User();
-        user.setId(1L);
-        user.setCreationDate(new Date(System.currentTimeMillis()));
-        user.setUsername("vladmarcel");
-        user.setFavoriteGenre(Genres.ACTION);
-        user.setPassword("Secret");
-        Movie movie = new Movie();
-        movie.setId(1L);
-        movie.setTitle("Home Alone");
-        movie.setGenres(COMEDY);
-        movie.setRating(7.1);
-        movie.setRealeaseDate(new Date(1992,12,12));
-        MovieDto movieDto = new MovieDto();
-        movieDto.setId(1L);
-        movieDto.setGenres(COMEDY);
-        movieDto.setTitle("Home Alone");
-        movieDto.setRating(7.1);
-        movieDto.setRealeaseDate(new Date(1992,12,12));
-        System.out.println("Username is: " + user.getUsername());
         when(userRepository.getById(anyLong())).thenReturn(user);
         when(movieRepository.getById(anyLong())).thenReturn(movie);
         when(customMapper.movieToMovieDto(any())).thenReturn(movieDto);
-
         MovieDto result = userService.addMovieToWatchlist(user.getId(), movie.getId());
-
         assertEquals(movie.getTitle(), movieDto.getTitle());
         assertEquals(movie.getGenres(), movieDto.getGenres());
         assertEquals(movie.getId(), movieDto.getId());
         assertEquals(movie.getRating(), movieDto.getRating());
-        verify(userRepository,times(1)).getById(user.getId());
-        verify(movieRepository,times(1)).getById(movie.getId());
+        verify(userRepository, times(1)).getById(user.getId());
+        verify(movieRepository, times(1)).getById(movie.getId());
     }
 
     @Test
     void showWatchlist() {
-        user = new User();
-        user.setId(1L);
-        user.setCreationDate(new Date(System.currentTimeMillis()));
-        user.setUsername("vladmarcel");
-        user.setFavoriteGenre(Genres.ACTION);
-        user.setPassword("Secret");
-        Movie movie = new Movie();
-        movie.setId(1L);
-        movie.setTitle("Home Alone");
-        movie.setGenres(COMEDY);
-        movie.setRating(7.1);
-        movie.setRealeaseDate(new Date(1992,12,12));
-        MovieDto movieDto = new MovieDto();
-        movieDto.setId(1L);
-        movieDto.setGenres(COMEDY);
-        movieDto.setTitle("Home Alone");
-        movieDto.setRating(7.1);
-        movieDto.setRealeaseDate(new Date(1992,12,12));
-        user.getMovieCollection().add(movie);
-        List<MovieDto> movieDtoList = new ArrayList<>();
-        movieDtoList.add(movieDto);
         when(userRepository.getById(anyLong())).thenReturn(user);
         when(customMapper.listAllMoviesDto(anyList())).thenReturn(movieDtoList);
-
         List<MovieDto> result = userService.showWatchlist(1L);
         assertEquals(1, result.size());
-        assertEquals(movie.getId(), result.get(0).getId());
-        assertEquals(movie.getTitle(), result.get(0).getTitle());
-        assertEquals(movie.getRating(), result.get(0).getRating());
+        assertEquals(movie.getId(), result.get(0)
+                                          .getId());
+        assertEquals(movie.getTitle(), result.get(0)
+                                             .getTitle());
+        assertEquals(movie.getRating(), result.get(0)
+                                              .getRating());
     }
 
     @Test
     void deleteMovieFromWatchlist() {
-        user = new User();
-        user.setId(1L);
-        user.setCreationDate(new Date(System.currentTimeMillis()));
-        user.setUsername("vladmarcel");
-        user.setFavoriteGenre(Genres.ACTION);
-        user.setPassword("Secret");
-        Movie movie = new Movie();
-        movie.setId(1L);
-        movie.setTitle("Home Alone");
-        movie.setGenres(COMEDY);
-        movie.setRating(7.1);
-        movie.setRealeaseDate(new Date(1992,12,12));
-        MovieDto movieDto = new MovieDto();
-        movieDto.setId(1L);
-        movieDto.setGenres(COMEDY);
-        movieDto.setTitle("Home Alone");
-        movieDto.setRating(7.1);
-        movieDto.setRealeaseDate(new Date(1992,12,12));
-        user.getMovieCollection().add(movie);
         when(userRepository.getById(anyLong())).thenReturn(user);
         when(movieRepository.getById(anyLong())).thenReturn(movie);
         when(customMapper.movieToMovieDto(any())).thenReturn(movieDto);
         MovieDto deletedMovie = userService.deleteMovieFromWatchlist(user.getId(), movie.getId());
-
         assertNotNull(deletedMovie);
         assertEquals(movie.getId(), deletedMovie.getId());
         assertEquals(movie.getTitle(), deletedMovie.getTitle());
         assertEquals(movie.getRating(), deletedMovie.getRating());
-        verify(userRepository,times(1)).getById(1L);
         verify(userRepository, times(1)).getById(1L);
-
+        verify(userRepository, times(1)).getById(1L);
     }
 }

@@ -1,5 +1,6 @@
 package com.streamingplatform.moviestreamingplatform.controller;
 
+import com.streamingplatform.moviestreamingplatform.exceptions.ResourceNotFoundException;
 import com.streamingplatform.moviestreamingplatform.model.Movie;
 import com.streamingplatform.moviestreamingplatform.model.dto.MovieDto;
 import com.streamingplatform.moviestreamingplatform.service.IMovieService;
@@ -40,11 +41,19 @@ public class MovieController {
 
     @GetMapping("/{movieId}")
     public MovieDto getMovieById(@PathVariable long movieId) {
-        return movieService.findById(movieId);
+        try {
+            return movieService.findById(movieId);
+        } catch (Exception e){
+            throw new ResourceNotFoundException("There is no movie with id: " + movieId);
+        }
     }
 
     @DeleteMapping("/{movieId}")
     public MovieDto deleteMovieById(@PathVariable long movieId) {
-        return movieService.deleteById(movieId);
+        try {
+            return movieService.deleteById(movieId);
+        }catch (Exception e){
+            throw new ResourceNotFoundException("There is no movie with id: " + movieId);
+        }
     }
 }
